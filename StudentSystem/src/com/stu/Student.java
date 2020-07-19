@@ -3,17 +3,9 @@ package com.stu;
 public class Student {
 	
 	private String age;
-	private String number;
+	private String id;
 	private String name;
 	private String address;
-	
-	public Student(String age, String number, String name, String address) {
-		
-		this.age = age;
-		this.number = number;
-		this.name = name;
-		this.address = address;
-	}
 	
 	public String getAge() {
 		
@@ -25,14 +17,14 @@ public class Student {
 		this.age = age;
 	}
 	
-	public String getNumber() {
+	public String getId() {
 		
-		return this.number;
+		return this.id;
 	}
 	
-	public void setNumber(String number) {
+	public void setId(String id) {
 		
-		this.number = number;
+		this.id = id;
 	}
 	
 	public String getName() {

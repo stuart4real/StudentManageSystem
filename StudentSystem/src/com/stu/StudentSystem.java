@@ -60,40 +60,49 @@ public class StudentSystem {
 		//Create the Scanner
 		Scanner sc = new Scanner(System.in);
 		
-		String number;
+		String id;
 		
-		//Ask for the info the student
+		//Ask for the info the student	
 		while (true) {
 			
-			System.out.println("What is the number of this student?");
-			number = sc.nextLine();
-			System.out.println("The number is: "+number);
+			boolean used = false;
+			System.out.println("What is the id of this student?");
+			id = sc.nextLine();
 			
 			// Check if this number has been used
 			for (int i=0; i < array.size(); i++) {
 				Student student = array.get(i);
 				
-				if (number == student.getNumber()) {
-					System.out.println("This number has been used. Please use a different one.");
+				if (id.equalsIgnoreCase(student.getId())) {
+					System.out.println("This id has been used. Please use a different one.");
+					used = true;
 					break;
 				}
+				
 			}
 			
-			// Exit this while loop
-			break;
+			// If this id has not been used, exit the while loop
+			if (!used) {
+				break;
+			}	
+			
 		}
 		System.out.println("What is the name of this student?");
 		String name = sc.nextLine();
-		System.out.println("The name is: "+name);
+		
 		System.out.println("What is the age of this student?");
 		String age = sc.nextLine();
-		System.out.println("The age is: "+age);
+		
 		System.out.println("What is the address of this student?");
 		String address = sc.nextLine();
-		System.out.println("The address is: "+address);
+		
 		
 		//Create the Student
-		Student student = new Student(age, name, number ,address);
+		Student student = new Student();
+		student.setName(name);
+		student.setAge(age);
+		student.setAddress(address);
+		student.setId(id);
 		array.add(student);
 		
 		System.out.println("Successfully added the student.");
@@ -103,12 +112,12 @@ public class StudentSystem {
 	public static void listStudent() {
 		
 		// Print out the form of the Student's list
-		System.out.println("Number  Name  Age  Address \n");
+		System.out.println("Number\tName\tAge\tAddress");
 		
 		// Iterate the array to print out the info of all the student
 		for (int i=0; i < array.size(); i++) {
 			Student student = array.get(i);
-			System.out.println(student.getNumber()+"\t"+student.getName()+"\t"+student.getAge()+"\t"+student.getAddress());
+			System.out.println(student.getId()+"\t"+student.getName()+"\t"+student.getAge()+"\t"+student.getAddress());
 			
 		}
 	}
@@ -126,13 +135,13 @@ public class StudentSystem {
 		
 		// Ask for the number of the student
 		System.out.println("Please type in the number of the student.");
-		String number = sc.nextLine();
+		String id = sc.nextLine();
 		
 		int index = -1;
 		for (int i=0; i < array.size(); i++) {
 			Student student = array.get(i);
 			
-			if (number.equalsIgnoreCase(student.getNumber())) {
+			if (id.equalsIgnoreCase(student.getId())) {
 				index = i;
 				break;
 			}
@@ -143,7 +152,7 @@ public class StudentSystem {
 		}
 		else {
 			Student student = array.get(index);
-			System.out.println(student.getNumber()+"\t"+student.getName()+"\t"+student.getAge()+"\t"+student.getAddress());
+			System.out.println(student.getId()+"\t"+student.getName()+"\t"+student.getAge()+"\t"+student.getAddress());
 		}
 		
 	}
@@ -161,13 +170,14 @@ public class StudentSystem {
 		
 		// Ask for the number of this student
 		System.out.println("Please type in the number of the student.");
-		String number = sc.nextLine();
+		String id = sc.nextLine();
 		
 		int index = -1;
 		for (int i=0; i < array.size(); i++) {
 			Student student = array.get(i);
 			
-			if (number.equalsIgnoreCase(student.getNumber())) {
+			// Iterate through the array to find the target student
+			if (id.equalsIgnoreCase(student.getId())) {
 				index = i;
 				break;
 			}
