@@ -1,13 +1,18 @@
 package com.stu;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StudentSystem {
-
-	private static ArrayList<Student> array = new ArrayList<Student>();
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		
+		String fileName = "StudentInfo.txt";
 		
 		while (true) {
 			
@@ -27,19 +32,19 @@ public class StudentSystem {
 			switch(choice) {
 				
 			case "1":
-				addStudent();
+				addStudent(fileName);
 				break;
 			
 			case "2":
-				listStudent();
+				listStudent(fileName);
 				break;
 				
 			case "3":
-				searchStudent();
+				searchStudent(fileName);
 				break;
 				
 			case "4":
-				deleteStudent();
+				deleteStudent(fileName);
 				break;
 				
 			case "5":
@@ -55,14 +60,23 @@ public class StudentSystem {
 		}
 	}
 	
-	public static void addStudent() {
+	/*
+	 * Add a student based on the user input into the student.txt
+	 */
+	public static void addStudent(String fileName) throws IOException {
 		
-		//Create the Scanner
+		// Create the array
+		ArrayList<Student> array = new ArrayList<Student>();
+		
+		// Read data from fileName into the array
+		readFile(fileName, array);
+		
+		// Create the Scanner
 		Scanner sc = new Scanner(System.in);
 		
 		String id;
 		
-		//Ask for the info the student	
+		// Ask for the info the student	
 		while (true) {
 			
 			boolean used = false;
@@ -97,7 +111,7 @@ public class StudentSystem {
 		String address = sc.nextLine();
 		
 		
-		//Create the Student
+		// Create the Student
 		Student student = new Student();
 		student.setName(name);
 		student.setAge(age);
@@ -107,10 +121,21 @@ public class StudentSystem {
 		
 		System.out.println("Successfully added the student.");
 		
+		// Write the info back to the file
+		writeFile(fileName, array);
 	}
 	
-	public static void listStudent() {
+	
+	/*
+	 * List all the student in this system
+	 */
+	public static void listStudent(String fileName) throws IOException {
+		// Create the array
+		ArrayList<Student> array = new ArrayList<Student>();
 		
+		// Read data from fileName into the array
+		readFile(fileName, array);
+				
 		// Print out the form of the Student's list
 		System.out.println("Number\tName\tAge\tAddress");
 		
@@ -122,8 +147,17 @@ public class StudentSystem {
 		}
 	}
 	
-	public static void searchStudent() {
+	/*
+	 * Search a student in this system
+	 */
+	public static void searchStudent(String fileName) throws IOException {
 		
+		// Create the array
+		ArrayList<Student> array = new ArrayList<Student>();
+		
+		// Read data from fileName into the array
+		readFile(fileName, array);
+				
 		// Check if there's any student
 		if (array.size() == 0) {
 			System.out.println("There is no student recoreded in this system.");
@@ -157,8 +191,17 @@ public class StudentSystem {
 		
 	}
 	
-	public static void deleteStudent() {
+	/*
+	 * Delete a student from this system
+	 */
+	public static void deleteStudent(String fileName) throws IOException {
 		
+		// Create the array
+		ArrayList<Student> array = new ArrayList<Student>();
+		
+		// Read data from fileName into the array
+		readFile(fileName, array);
+				
 		// Check if there's any student
 		if (array.size() == 0) {
 			System.out.println("There is no student recoreded in this system.");
@@ -190,6 +233,57 @@ public class StudentSystem {
 			array.remove(index);
 			System.out.println("The target student has been deleted.");
 		}
+		
+		// Write the array back into the fileName
+		writeFile(fileName, array);
 
+	}
+	
+	/*
+	 * Write the data from the array into the fileName
+	 */
+	public static void writeFile(String fileName, ArrayList<Student> array) throws IOException {
+		
+		// Create the BufferedWriter
+		BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+		
+		// Iterate the array to write the student'info into the file
+		for (int i=0; i<array.size(); i++) {
+			Student s = array.get(i);
+			StringBuilder info = new StringBuilder();
+			// Id,Name,Age,Address
+			info.append(s.getId()).append(",").append(s.getName()).append(",").append(s.getAge()).append(",").append(s.getAddress());
+			bw.write(info.toString());
+			bw.newLine();
+			bw.flush();
+			
+		}
+		
+		// Close the BufferedWriter
+		bw.close();
+	}
+	
+	/*
+	 * Read the data from the fileName into array
+	 */
+	public static void readFile(String fileName, ArrayList<Student> array) throws IOException{
+		
+		// Create the BufferedReader
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		
+		// Read the file line by line till the end
+		String line;
+		while((line = br.readLine()) != null) {
+			String[] data = line.split(",");
+			Student student = new Student();
+			student.setId(data[0]);
+			student.setName(data[1]);
+			student.setAge(data[2]);
+			student.setAddress(data[3]);
+			array.add(student);
+		}
+		
+		// Close the BufferedReader
+		br.close();
 	}
 }
